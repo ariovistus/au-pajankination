@@ -1,0 +1,11 @@
+build_npm.sh
+coverage/
+samples/
+src/
+tests/
+karma.conf.js
+*.tgz
+*.ps1
+*.sh
+.travis.yml
+tsconfig.json

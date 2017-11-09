@@ -1,0 +1,28 @@
+{
+  "name": "au-pajankination",
+  "version": "0.0.1",
+  "license": "MIT",
+  "typings": "./dist/nuhuhtodo.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ariovistus/au-pajankination.git"
+  },
+  "main": "dist/combobox.js",
+  "devDependencies": {
+    "jasmine-core": "~2.4.1",
+    "karma": "~0.13.19",
+    "karma-chrome-launcher": "~0.2.2",
+    "karma-coverage": "~0.5.3",
+    "karma-jasmine": "~0.3.6",
+    "karma-jspm": "~2.0.2",
+    "karma-typescript-preprocessor": "0.0.21",
+    "protractor": "^3.2.2",
+    "tsconfig-glob": "^0.4.3",
+    "typescript": "~2.3"
+  },
+  "dependencies": {
+    "aurelia-framework": "^1.0.0",
+    "keycode": "^2.1.9"
+  }
+}
+

@@ -9,3 +9,5 @@ karma.conf.js
 *.sh
 .travis.yml
 tsconfig.json
+*.py
+*.log

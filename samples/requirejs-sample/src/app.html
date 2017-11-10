@@ -1,0 +1,39 @@
+<template>
+    <require from="au-pajankination/combobox"></require>
+    <require from="./style.css"></require>
+    <h1>${message}</h1>
+
+    <div>
+        <paj-combobox data-source.bind="dataSource" selected-id.bind="selectedNumber1" width: "300px">
+            <template replace-part="item-template">
+                <div>
+                    <h4> ${item.id}</h4>
+                    
+                    <i>~ ${item.id} ~</i>
+                </div>
+            </template>
+            <template replace-part="selected-template">
+                ~ ${selectedObject.id} ~
+            </template>
+        </paj-combobox>
+    </div>
+    <div>
+        <!-- :( -->
+        <paj-combobox data-source.bind="dataSource" selected-id.bind="selectedNumber2" width: "300px" select-closes.bind="false">
+            <template replace-part="item-template">
+                <div>
+                    <h4><input type='checkbox' checked.bind='dataState[item.id]' click.delegate='checky($event, item)' /> ${item.id}</h4>
+                    
+                    <i>${dataStateStr}</i>
+                </div>
+            </template>
+            <template replace-part="selected-template">
+                ~ ${selectedObject.id} ~
+            </template>
+        </paj-combobox>
+
+    </div>
+
+    <input type='checkbox' checked.bind='dataState["tacos"]' />
+    <button click.delegate="abc()"> Update</button> ${dataStateStr}
+</template>

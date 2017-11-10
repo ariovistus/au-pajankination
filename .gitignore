@@ -1,4 +1,5 @@
-node_modules
+dist/
+node_modules/
 coverage
 npm-debug.log
 *.swp
@@ -12,3 +13,5 @@ tests/unit/src/src/*
 sample/src/plugins/
 typings/
 *.tgz
+*.d.ts
+*.log

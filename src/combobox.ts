@@ -4,13 +4,15 @@ import * as keycode from "keycode";
 
 @customElement("paj-combobox")
 @autoinject
-export class OdataComboBox {
+export class ComboBox {
     @bindable dataSource: IDataSource;
     @bindable({defaultBindingMode: bindingMode.twoWay}) selectedId: any;
     @bindable({defaultBindingMode: bindingMode.oneWay}) selectedObject: IComboboxRow;
     @bindable({defaultValue: "300px"}) width: string;
     @bindable({defaultValue: "none"}) maxWidth: string;
     @bindable({defaultValue: 20}) pageSize: number; // pagingParams
+
+    @bindable({defaultValue: true}) selectCloses: boolean;
 
     previousPageIndex: number; // previousPageState
     currentPageIndex: number; // currentPageState
@@ -392,7 +394,10 @@ export class OdataComboBox {
         if(index < this.items.length && index >= 0) {
             this.scrollItemToView(index);
         }
-        this.closeDropdown();
+
+        if(this.selectCloses) {
+            this.closeDropdown();
+        }
     }
 
     toggleDropdown() {

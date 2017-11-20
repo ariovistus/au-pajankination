@@ -7,6 +7,7 @@ export class App {
     mahclasses = "honk claptrap";
     dataSource: SpoofedDataSource;
     dataState: any;
+    checked: boolean = false;
     dataStateStr: string;
 
     constructor() {

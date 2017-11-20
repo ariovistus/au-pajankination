@@ -74,17 +74,7 @@
             "env": "dev"
           },
           "text",
-          "keycode",
-          {
-              "name": "au-pajankination",
-              "main": "combobox",
-              "path": "../node_modules/au-pajankination/dist",
-              "resources": [
-                  "combobox.html",
-                  "select2.css",
-                  "static.html"
-              ]
-          }
+          "keycode"
         ]
       }
     ],

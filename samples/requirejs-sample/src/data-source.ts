@@ -1,5 +1,5 @@
 
-import { IComboboxDataSource, IComboboxResults } from "au-pajankination/interfaces";
+import { IComboboxDataSource, IComboboxResults } from "./resources/elements/interfaces";
 
 
 export class SpoofedDataSource implements IComboboxDataSource {

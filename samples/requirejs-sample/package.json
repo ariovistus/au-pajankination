@@ -8,11 +8,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "au-pajankination": "file:../../au-pajankination-0.0.1.tgz",
     "aurelia-animator-css": "^1.0.2",
     "aurelia-bootstrapper": "^2.1.1",
     "aurelia-dialog": "^1.0.0-rc.2.0.0",
     "bluebird": "^3.4.1",
+    "keycode": "^2.1.9",
     "requirejs": "^2.3.2",
     "text": "github:requirejs/text#latest"
   },

@@ -103,86 +103,7 @@ export class ComboBox {
         return this.getPage(this.pageSize, this.pageSize * index, this.searchText);
     }
 
-
-    private scrollItemToView(index, forceByTop=false) {
-        let elementScrollTop = 0;
-        if(this.noResults) {
-            elementScrollTop = this.noResultsElement.scrollHeight;
-        }
-        for(var i = 0; i < index; i++) {
-            elementScrollTop += this.items[i]._element.scrollHeight;
-        }
-        var element: any = this.items[index]._element;
-        let viewPaneHeight = element.parentNode.parentNode.scrollHeight;
-        let elementScrollBottom = elementScrollTop + element.scrollHeight;
-
-        if(!forceByTop && element.parentNode.scrollTop < elementScrollBottom - viewPaneHeight) {
-            element.parentNode.scrollTop = elementScrollBottom - viewPaneHeight;
-        }else if(forceByTop || element.parentNode.scrollTop > elementScrollTop) {
-            element.parentNode.scrollTop = elementScrollTop;
-        }
-    }
-
     public detached() {
-    }
-
-    public dunscrolled(scrollEvent) {
-        let visibleIndex = this.physicalIndexFromScrollTop(this.dropdownScrollTop);
-        if(visibleIndex <= 0.75 * this.lastPreviousIndex()) {
-            //this.shiftPageDown();
-        }else if(visibleIndex >= this.firstNextIndex()) {
-            //this.shiftPageUp();
-        }
-    }
-
-    private lastPreviousIndex() {
-        return this.previousPage.length-1;
-    }
-
-    private firstNextIndex() {
-        return this.previousPage.length + this.currentPage.length;
-    }
-
-    private selectedItemOutsideWindow() {
-        this.physicalSelectedIndex = -1;
-    }
-
-    shiftingDownPromise: Promise<any>;
-
-    private cancelShiftPageDown() {
-        if(this.shiftingDownPromise == null) {
-            return;
-        }
-        this.shiftingDownPromise['canceled'] = true;
-        this.shiftingDownPromise = null;
-    }
-
-    shiftingUpPromise: Promise<any>;
-
-    // either aurelia has no way to wait for dom elements to be populated, or I haven't found it yet
-
-    private cancelShiftPageUp() {
-        if(this.shiftingUpPromise == null) {
-            return;
-        }
-        this.shiftingUpPromise['canceled'] = true;
-        this.shiftingUpPromise = null;
-    }
-
-    /**
-     * given scrollTop of window, determine the index into items of the item displayed at scrollTop
-     * returns index in [0 to items.length]
-     */
-    private physicalIndexFromScrollTop(scrollTop) {
-        let elementScrollTop = 0;
-        let physicalIndex = 0;
-        for(; physicalIndex < this.items.length; physicalIndex++) {
-            elementScrollTop += this.items[physicalIndex]._element.scrollHeight;
-            if(scrollTop < elementScrollTop) {
-                break;
-            }
-        }
-        return physicalIndex;
     }
 
     public onClick(clickEvent) {
@@ -208,15 +129,6 @@ export class ComboBox {
     openDropdown() {
         this.opened = true;
         this.setDropdownPosition();
-    }
-
-    private anyHeightlessElements(limitIndex) {
-        for(var i = 0; i < limitIndex; i++) {
-            if(this.items[i]._element.scrollHeight == 0) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private setDropdownPosition() {

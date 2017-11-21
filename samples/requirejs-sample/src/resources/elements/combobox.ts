@@ -37,8 +37,6 @@ export class ComboBox {
      */
     physicalSelectedIndex: number;
     selectedItemPageIndex: number;
-    keyListener: any;
-    clickListener: any;
 
     searchText: string;
     dropdownScrollTop: any;
@@ -63,19 +61,8 @@ export class ComboBox {
     }
 
     public attached() {
-        this.keyListener = (keyEvent) => {
-            this.onKeyDown(keyEvent);
-        };
-        this.clickListener = (clickEvent) => {
-            if(!this.element.contains(clickEvent.target)) {
-                this.closeDropdown();
-            }
-        };
 
         this.initDropdown();
-
-        document.addEventListener("keydown", this.keyListener);
-        document.addEventListener("click", this.clickListener);
     }
 
     private setPageIndecesAtStart() {
@@ -88,22 +75,7 @@ export class ComboBox {
         let promise : Promise<any> = Promise.resolve("yup");
         let itemIndex = 0;
 
-        if(this.selectedId != null) {
-            promise = this.dataSource.getIndex(this.selectedId).then(index => {
-                this.selectedItemPageIndex = Math.floor(index / this.pageSize);
-                this.currentPageIndex = this.selectedItemPageIndex; // currentPageState = getPageOf(id)
-                this.previousPageIndex = this.currentPageIndex - 1;
-                this.nextPageIndex = this.currentPageIndex + 1;
-                itemIndex = index;
-                this.needsScrollToSelectedItem = true;
-            }, errorResponse => {
-                // can't find item, can't locate window containing item, so clear item and act like it wasn't set
-                this.deselect();
-                this.setPageIndecesAtStart();
-            });
-        }else{
-            this.setPageIndecesAtStart();
-        }
+        this.setPageIndecesAtStart();
         promise = promise.then(() => Promise.all([
             this.getPreviousPage(this.previousPageIndex), // getPage(previousPageState)
             this.getCurrentPage(this.currentPageIndex), // getPage(currentPageState)
@@ -152,32 +124,11 @@ export class ComboBox {
     }
 
     private getPreviousPage(index): Promise<IComboboxResults> {
-        if(index < 0) { // if pageState == null
-            return Promise.resolve({rows: [], count: 0});
-        }
-        return this.getPage(this.pageSize, this.pageSize * index, this.searchText);
+        return Promise.resolve({rows: [], count: 0});
     }
 
     private getNextPage(index): Promise<IComboboxResults> {
-        return this.getPage(this.pageSize, this.pageSize * index, this.searchText);
-    }
-
-    private onKeyDown(keyEvent) {
-        if(this.opened) {
-            if(keyEvent.keyCode == keycode("down")) {
-                this.highlight(this.highlightedIndex+1);
-                setTimeout(() => this.scrollHighlightedToView(), 0);
-            }else if(keyEvent.keyCode == keycode("up")) {
-                this.highlight(this.highlightedIndex-1);
-                setTimeout(() => this.scrollHighlightedToView(), 0);
-            }else if(keyEvent.keyCode == keycode("enter")) {
-                this.select(this.highlightedIndex);
-                this.closeDropdown();
-            }else if(keyEvent.keyCode == keycode("escape") || 
-                    keyEvent.keyCode == keycode('tab')) {
-                this.closeDropdown();
-            }
-        }
+        return Promise.resolve({rows: [], count: 0});
     }
 
     private scrollHighlightedToView() {
@@ -206,8 +157,8 @@ export class ComboBox {
     }
 
     public detached() {
-        document.removeEventListener("keydown", this.keyListener);
-        document.removeEventListener("click", this.clickListener);
+        //document.removeEventListener("keydown", this.keyListener);
+        //document.removeEventListener("click", this.clickListener);
     }
 
     public dunscrolled(scrollEvent) {

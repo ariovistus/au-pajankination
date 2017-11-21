@@ -31,33 +31,14 @@
         style="position: absolute;">
         <span class="select2-dropdown select2-dropdown--above" dir="ltr">
             <span class="select2-results">
+            </span>
+        </span>
+    </span>
                 <ul class="select2-results__options" role="tree" id="select2-SupervisorId-results">
-
-                    <li 
-                        class="select2-results__option select2-results_message" 
-                        if.bind="noResults" 
-                        element.ref="noResultsElement"
-                        role="treeitem" aria-live="assertive">
-                        No results found
-                    </li>
-
-                    <li repeat.for="item of items" 
-                        class="select2-results__option ${item == highlighted ? 'select2-results__option--highlighted':''}" 
-                        element.ref="item._element"
-                        role="treeitem" 
-                        mouseover.delegate="highlight($index)"
-                        show.bind="!searching || item._isMatch"
-                        >
+                    <li repeat.for="item of items" class="select2-results__option" >
                         <template part='item-template' replaceable>
                             ${item}
                         </template>
                     </li>
                 </ul>
-                <span style="display:none">
-                    <!-- odd, aurelia doesn't notice the updates to highlighted unless this is here -->
-                    ${highlighted}
-                </span>
-            </span>
-        </span>
-    </span>
 </template>

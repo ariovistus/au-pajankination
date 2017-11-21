@@ -78,7 +78,8 @@ export class ComboBox {
         this.setPageIndecesAtStart();
         promise = promise.then((resultses) => {
             this.currentPage = resultses.rows;
-            this.rebuildItems();
+            this.items = [];
+            this.items.push.apply(this.items, this.currentPage)
             this.physicalSelectedIndex = 0 + 
                 (itemIndex - this.currentPageIndex * this.pageSize); // previousPage.length + offset in current page
         });
@@ -86,10 +87,6 @@ export class ComboBox {
         return promise;
     }
 
-    private rebuildItems() {
-        this.items = [];
-        this.items.push.apply(this.items, this.currentPage)
-    }
 
     private getPage(take, skip, searchText): Promise<IComboboxResults> {
         return this.dataSource.getPage(take, skip, searchText).then(results => {
@@ -107,12 +104,7 @@ export class ComboBox {
     }
 
     public onClick(clickEvent) {
-        if(clickEvent.target.classList.contains("select2-selection__clear")) {
-            this.clearSelection();
-            this.closeDropdown();
-        }else{
-            this.toggleDropdown();
-        }
+        this.toggleDropdown();
     }
 
     onClickItem(index, clickEvent) {

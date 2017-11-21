@@ -361,32 +361,7 @@ export class ComboBox {
 
     openDropdown() {
         this.opened = true;
-        setTimeout(() => {
-            this.searchTextElement['focus']();
-        }, 1);
         this.setDropdownPosition();
-        this.maybeScrollToSelectedItem();
-        this.highlight(this.physicalSelectedIndex || 0);
-    }
-
-    private maybeScrollToSelectedItem() {
-        if(this.needsScrollToSelectedItem) {
-            this.cancelSearch();
-            let index = Math.max(0, this.physicalSelectedIndex);
-            this.dropdownScrollTop = 0;
-            this.waitWhile({
-                predicate: () => this.physicalSelectedIndex > 0 && this.dropdownScrollTop == 0,
-                onWait: () => {
-                    this.scrollItemToView(index, true);
-                },
-                onComplete: () => {
-                    this.needsScrollToSelectedItem = false;
-                    // allow shifting now
-                    this.cancelShiftPageDown();
-                    this.cancelShiftPageUp();
-                }
-            });
-        }
     }
 
     private anyHeightlessElements(limitIndex) {
@@ -441,111 +416,14 @@ export class ComboBox {
     }
 
     onSearchKeydown(keyEvent) {
-        if(this.searchText != null && this.searchText != "") {
-            this.search();
-        }else if(this.inSearchMode) {
-            this.cancelSearch();
-            this.initDropdown().then(() => {
-                return this.waitWhile({
-                    predicate: () => this.items.length > 0 && this.items[0]._element == null,
-                    onComplete: () => {
-                    }
-                });
-            }).then(() => {
-                this.maybeScrollToSelectedItem();
-            });
-        }
     }
 
     searchPromise: Promise<any>;
-    private search() {
-        this.inSearchMode = true;
-        this.searching = true;
-        if(this.searchPromise != null && this.searchPromise['searchText'] == this.searchText) {
-            return;
-        }
-        if(this.searchPromise != null && this.searchPromise['searchText'] != this.searchText) {
-            this.cancelSearch();
-        }
-        this.maxPageIndexKnown = false;
-        // prevent shifting from messing with this
-        this.shiftingDownPromise = Promise.resolve("yup");
-        this.shiftingUpPromise = Promise.resolve("yup");
-        let promise = Promise.all([
-            this.getCurrentPage(0), // getCurrentPage(currentPageState)
-            this.getNextPage(1) // getNextPage(currentPageState) <- semantics change for getNextPage
-        ]).then(resultses => {
-            if(promise['canceled']) {
-                return
-            }
-            this.searching = false;
-            this.previousPage = [];
-            this.currentPage = resultses[0].rows;
-            this.nextPage = resultses[1].rows;
-            this.setPageIndecesAtStart();
-            this.rebuildItems();
-            this.noResults = resultses[0].rows.length == 0;
-            this.physicalSelectedIndex = -1;
-            return this.waitWhile({
-                predicate: () => !promise['canceled'] && this.items.length > 0 && this.items[0]._element == null,
-                onComplete: () => {
-                    if(promise['canceled']) {
-                        return;
-                    }
-                    if(this.items.length > 0) {
-                        this.scrollItemToView(0);
-                    }
-                    this.searchPromise = null;
-                    // shifting can happen now
-                    this.cancelShiftPageDown();
-                    this.cancelShiftPageUp();
-                },
-                onError: () => {
-                    this.searchPromise = null;
-                }
-            });
-        }, errorResponse => {
-            this.searching = false;
-            this.noResults = true;
-        });
-        promise['searchText'] = this.searchText;
-        promise['canceled'] = false;
-        this.searchPromise = promise;
-    }
 
     private cancelSearch() {
         if(this.searchPromise != null) {
             this.searchPromise['canceled'] = true;
             this.searchPromise = null;
-        }
-    }
-
-    private matches(item) {
-        for(var key of Object.keys(item)) {
-            if(typeof item[key] == "string") {
-                if(item[key].toLowerCase().indexOf(this.searchText) != -1) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public deselect() {
-        this.selectedId = null;
-        this.selectedObject = null;
-        this.physicalSelectedIndex = null;
-    }
-
-    public selectedIdChanged(newValue, oldValue) {
-        if(newValue != null) {
-            this.initDropdown().then(() => {
-                if(this.opened) {
-                    this.maybeScrollToSelectedItem();
-                }
-            })
-        }else{
-            this.deselect();
         }
     }
 }

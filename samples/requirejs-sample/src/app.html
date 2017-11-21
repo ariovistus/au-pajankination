@@ -4,20 +4,18 @@
 
     <div>
         <!-- :( -->
-        <paj-combobox data-source.bind="dataSource" selected-id.bind="selectedNumber2" width: "300px" select-closes.bind="false">
+        <paj-combobox data-source.bind="dataSource">
             <template replace-part="item-template">
                 <div>
-                    <h4><input type='checkbox' checked.bind='checked' click.delegate='checky($event, item)' /> ${item.id}</h4>
+                    <h4><input type='checkbox' checked.bind='checked' click.delegate='checky($event, item)'/> </h4>
                     
-                    <i>${dataStateStr}</i>
                 </div>
-            </template>
-            <template replace-part="selected-template">
-                ~ ${selectedObject.id} ~
             </template>
         </paj-combobox>
 
         <label for='checked'> checked: ${checked} <input type='checkbox' checked.bind='checked' id='checked' /> </label>
+
+        <input type='checkbox' checked.bind='checked' click.trigger='checky()' />
     </div>
 
 </template>

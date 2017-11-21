@@ -72,43 +72,23 @@ export class ComboBox {
     }
 
     private initDropdown(): Promise<any> {
-        let promise : Promise<any> = Promise.resolve("yup");
+        let promise : Promise<any> = this.getCurrentPage(this.currentPageIndex);
         let itemIndex = 0;
 
         this.setPageIndecesAtStart();
-        promise = promise.then(() => Promise.all([
-            this.getPreviousPage(this.previousPageIndex), // getPage(previousPageState)
-            this.getCurrentPage(this.currentPageIndex), // getPage(currentPageState)
-            this.getNextPage(this.nextPageIndex),       // getPage(nextPageState) 
-        ])).then((resultses: IComboboxResults[]) => {
-            this.previousPage = resultses[0].rows;
-            this.currentPage = resultses[1].rows;
-            this.nextPage = resultses[2].rows;
+        promise = promise.then((resultses) => {
+            this.currentPage = resultses.rows;
             this.rebuildItems();
-            this.physicalSelectedIndex = this.previousPage.length + 
+            this.physicalSelectedIndex = 0 + 
                 (itemIndex - this.currentPageIndex * this.pageSize); // previousPage.length + offset in current page
         });
 
-        if(this.selectedId != null) {
-            promise.then(() => {
-                for(var item of this.currentPage) {
-                    if(this.dataSource.getId(item) == this.selectedId) {
-                        this.selectedObject = item;
-                    }
-                }
-                // prevent shifts until current item has been scrolled into view
-                this.shiftingDownPromise = Promise.resolve("yup");
-                this.shiftingUpPromise = Promise.resolve("yup");
-            });
-        }
         return promise;
     }
 
     private rebuildItems() {
         this.items = [];
-        this.items.push.apply(this.items, this.previousPage)
         this.items.push.apply(this.items, this.currentPage)
-        this.items.push.apply(this.items, this.nextPage)
     }
 
     private getPage(take, skip, searchText): Promise<IComboboxResults> {
@@ -123,19 +103,6 @@ export class ComboBox {
         return this.getPage(this.pageSize, this.pageSize * index, this.searchText);
     }
 
-    private getPreviousPage(index): Promise<IComboboxResults> {
-        return Promise.resolve({rows: [], count: 0});
-    }
-
-    private getNextPage(index): Promise<IComboboxResults> {
-        return Promise.resolve({rows: [], count: 0});
-    }
-
-    private scrollHighlightedToView() {
-        if(this.highlightedIndex || this.highlightedIndex === 0) {
-            this.scrollItemToView(this.highlightedIndex);
-        }
-    }
 
     private scrollItemToView(index, forceByTop=false) {
         let elementScrollTop = 0;
@@ -157,16 +124,14 @@ export class ComboBox {
     }
 
     public detached() {
-        //document.removeEventListener("keydown", this.keyListener);
-        //document.removeEventListener("click", this.clickListener);
     }
 
     public dunscrolled(scrollEvent) {
         let visibleIndex = this.physicalIndexFromScrollTop(this.dropdownScrollTop);
         if(visibleIndex <= 0.75 * this.lastPreviousIndex()) {
-            this.shiftPageDown();
+            //this.shiftPageDown();
         }else if(visibleIndex >= this.firstNextIndex()) {
-            this.shiftPageUp();
+            //this.shiftPageUp();
         }
     }
 
@@ -183,55 +148,6 @@ export class ComboBox {
     }
 
     shiftingDownPromise: Promise<any>;
-    private shiftPageDown() {
-        if(this.shiftingDownPromise != null) {
-            return;
-        }
-        if(this.currentPageIndex == 0) {
-            return;
-        }
-        let oldVisibleIndex = this.physicalIndexFromScrollTop(this.dropdownScrollTop);
-        let promise = this.getPreviousPage(this.previousPageIndex-1).then(results => { // getPage(decrement(previousPageState))
-            if(!promise['canceled']) {
-                if(this.physicalSelectedIndex != null && this.physicalSelectedIndex >= this.firstNextIndex()) {
-                    this.selectedItemOutsideWindow();
-                }else if(this.physicalSelectedIndex != -1) {
-                    this.physicalSelectedIndex += results.rows.length;
-                }
-                oldVisibleIndex += results.rows.length;
-                this.nextPage = this.currentPage;
-                this.currentPage = this.previousPage;
-                this.previousPage = results.rows;
-                this.previousPageIndex--;
-                this.currentPageIndex--; // decrement(currentPageState)
-                this.nextPageIndex--;
-                this.rebuildItems();
-                return this.waitWhile({
-                    predicate: () => this.previousPage.length > 0 && this.previousPage[0]._element == null,
-                    onComplete: () => {
-                        let newVisibleIndex = this.physicalIndexFromScrollTop(this.dropdownScrollTop);
-                        if(oldVisibleIndex != newVisibleIndex) {
-                            this.scrollItemToView(oldVisibleIndex, true);
-                        }
-                    },
-                    onError: () => this.shiftingDownPromise = null,
-                }).then(x => {
-                    return this.waitWhile({
-                        predicate: () => {
-                            let newVisibleIndex = this.physicalIndexFromScrollTop(this.dropdownScrollTop);
-                            return oldVisibleIndex != newVisibleIndex;
-                        },
-                        onComplete: () => {
-                            this.shiftingDownPromise = null;
-                        },
-                        onError: () => this.shiftingDownPromise = null,
-                    });
-                });
-            }
-        });
-        this.shiftingDownPromise = promise
-        this.shiftingDownPromise['canceled'] = false;
-    }
 
     private cancelShiftPageDown() {
         if(this.shiftingDownPromise == null) {
@@ -242,70 +158,8 @@ export class ComboBox {
     }
 
     shiftingUpPromise: Promise<any>;
-    private shiftPageUp() {
-        if(this.shiftingUpPromise != null) {
-            return;
-        }
-        if(this.maxPageIndexKnown && this.nextPageIndex >= this.maxPageIndex+1) { // maxPageKnown && exceedsMaxPage(nextPageState)
-            return;
-        }
-        let promise = this.getNextPage(this.nextPageIndex+1).then(results => { // getPage(increment(nextPageState))
-            if(!promise['canceled'] && results.rows.length != 0) {
-                let lastPreviousIndex = this.previousPage.length-1;
-                if(this.physicalSelectedIndex != null && this.physicalSelectedIndex <= this.lastPreviousIndex()) {
-                    this.selectedItemOutsideWindow();
-                }else{
-                    this.physicalSelectedIndex -= this.previousPage.length;
-                }
-                this.previousPage = this.currentPage;
-                this.currentPage = this.nextPage;
-                this.nextPage = results.rows;
-                this.previousPageIndex++;
-                this.currentPageIndex++; // increment(currentPageState)
-                this.nextPageIndex++;
-                this.rebuildItems();
-
-                return this.waitWhile({
-                    predicate: () => this.nextPage.length > 0 && this.nextPage[0]._element == null,
-                    onComplete: () => {
-                        this.shiftingUpPromise = null
-                    },
-                    onError: () => this.shiftingUpPromise = null,
-                });
-
-            }
-        });
-        this.shiftingUpPromise = promise
-        this.shiftingUpPromise['canceled'] = false;
-        this.cancelShiftPageDown();
-    }
 
     // either aurelia has no way to wait for dom elements to be populated, or I haven't found it yet
-    private waitWhile(opts): Promise<any> {
-        return new Promise((resolve, reject) => {
-            let intervalId;
-            let action = () => {
-                try {
-                    if (opts.predicate()) {
-                        if('onWait' in opts && opts.onWait != null) {
-                            opts.onWait();
-                        }
-                        return;
-                    }
-                    opts.onComplete();
-                    clearInterval(intervalId);
-                    resolve();
-                }catch(e) {
-                    if('onError' in opts && opts.onError != null) {
-                        opts.onError();
-                    }
-                    clearInterval(intervalId);
-                    reject(e);
-                }
-            };
-            intervalId = setInterval(action, 1);
-        });
-    }
 
     private cancelShiftPageUp() {
         if(this.shiftingUpPromise == null) {
@@ -341,14 +195,6 @@ export class ComboBox {
     }
 
     onClickItem(index, clickEvent) {
-        this.select(index);
-        if(index < this.items.length && index >= 0) {
-            this.scrollItemToView(index);
-        }
-
-        if(this.selectCloses) {
-            this.closeDropdown();
-        }
     }
 
     toggleDropdown() {
@@ -409,21 +255,9 @@ export class ComboBox {
     }
 
     highlight(index) {
-        if(index < 0) index = 0;
-        if(index >= this.items.length) index = this.items.length-1;
-        this.highlighted = this.items[index];
-        this.highlightedIndex = index;
     }
 
     onSearchKeydown(keyEvent) {
     }
 
-    searchPromise: Promise<any>;
-
-    private cancelSearch() {
-        if(this.searchPromise != null) {
-            this.searchPromise['canceled'] = true;
-            this.searchPromise = null;
-        }
-    }
 }

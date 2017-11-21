@@ -104,7 +104,7 @@ export class ComboBox {
     }
 
     public onClick(clickEvent) {
-        this.toggleDropdown();
+        //this.toggleDropdown();
     }
 
     onClickItem(index, clickEvent) {

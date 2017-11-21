@@ -1,44 +1,8 @@
 <template>
-    <require from="./select2.css"></require>
-
-    <span class="select2 select2-container select2-container--default select2-container--below"
-          css="width:${width}; max-width: ${maxWidth}"
-        element.ref="displayElement"
-        >
-        <span class="selection">
-            <span class="select2-selection select2-selection--single" 
-                  role="combobox" aria-haspopup="true" aria-expanded="false" 
-                  tabindex="0" aria-labeledby="select2-SupervisorId-container">
-                <span class="select2-selection__rendered" id="select2-SupervisorId-container" title="Newcomer, Ellery Analyst/Developer"> 
-                    <span class="select2-selection__clear" show.bind="selectedObject != null">x</span>
-                    <span part="selected-template" replaceable>
-                        ${selectedObject}
-                    </span>
-                </span>
-                <span class="select2-selection__arrow" role="presentation">
-                    <b role="presentation"></b>
-                </span>
-            </span>
-        </span>
-        <span class="dropdown-wrapper">
-        </span>
-    </span>
-
-
-    <span class="select2-container select2-container--default select2-container--open"
-        show.bind="opened"
-        element.ref="dropdownElement"
-        style="position: absolute;">
-        <span class="select2-dropdown select2-dropdown--above" dir="ltr">
-            <span class="select2-results">
-            </span>
-        </span>
-    </span>
-                <ul class="select2-results__options" role="tree" id="select2-SupervisorId-results">
-                    <li repeat.for="item of items" class="select2-results__option" >
-                        <template part='item-template' replaceable>
-                            ${item}
-                        </template>
-                    </li>
-                </ul>
+    <ul >
+        <li repeat.for="item of items" >
+            <template part='item-template' replaceable>
+            </template>
+        </li>
+    </ul>
 </template>

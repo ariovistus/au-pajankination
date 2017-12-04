@@ -7,7 +7,6 @@ export class App {
     mahclasses = "honk claptrap";
     dataSource: SpoofedDataSource;
     dataState: any;
-    dataStateStr: string;
 
     constructor() {
         this.dataSource = new SpoofedDataSource();
@@ -20,10 +19,6 @@ export class App {
         }else{ 
             item.classes = "";
         }
-    }
-
-    abc() {
-        this.dataStateStr = JSON.stringify(this.dataState);
-
+        return true;
     }
 }

@@ -256,7 +256,7 @@ export class ComboBox {
                 this.nextPageIndex--;
                 this.rebuildItems();
                 return this.waitWhile({
-                    predicate: () => this.previousPage.length > 0 && this.previousPage[0]._element == null,
+                    predicate: () => this.previousPage.length > 0 && this.previousPage[this.previousPage.length-1]._element == null,
                     onComplete: () => {
                         let newVisibleIndex = this.physicalIndexFromScrollTop(this.dropdownScrollTop);
                         if(oldVisibleIndex != newVisibleIndex) {
@@ -315,7 +315,7 @@ export class ComboBox {
                 this.rebuildItems();
 
                 return this.waitWhile({
-                    predicate: () => this.nextPage.length > 0 && this.nextPage[0]._element == null,
+                    predicate: () => this.nextPage.length > 0 && this.nextPage[this.nextPage.length-1]._element == null,
                     onComplete: () => {
                         this.shiftingUpPromise = null
                     },
@@ -387,6 +387,7 @@ export class ComboBox {
         }else{
             this.toggleDropdown();
         }
+        return true;
     }
 
     onClickItem(index, clickEvent) {
@@ -398,6 +399,7 @@ export class ComboBox {
         if(this.selectCloses) {
             this.closeDropdown();
         }
+        return true;
     }
 
     toggleDropdown() {
@@ -496,7 +498,7 @@ export class ComboBox {
             this.cancelSearch();
             this.initDropdown().then(() => {
                 return this.waitWhile({
-                    predicate: () => this.items.length > 0 && this.items[0]._element == null,
+                    predicate: () => this.items.length > 0 && this.items[this.items.length-1]._element == null,
                     onComplete: () => {
                     }
                 });
@@ -536,7 +538,7 @@ export class ComboBox {
             this.noResults = resultses[0].rows.length == 0;
             this.physicalSelectedIndex = -1;
             return this.waitWhile({
-                predicate: () => !promise['canceled'] && this.items.length > 0 && this.items[0]._element == null,
+                predicate: () => !promise['canceled'] && this.items.length > 0 && this.items[this.items.length-1]._element == null,
                 onComplete: () => {
                     if(promise['canceled']) {
                         return;

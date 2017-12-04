@@ -56,18 +56,20 @@
                         No results found
                     </li>
 
-                    <li repeat.for="item of items" 
-                        class="select2-results__option ${item == highlighted ? 'select2-results__option--highlighted':''}" 
-                        element.ref="item._element"
-                        role="treeitem" 
-                        click.delegate="onClickItem($index)"
-                        mouseover.delegate="highlight($index)"
-                        show.bind="!searching || item._isMatch"
-                        aria-selected="${item == selectedObject ? 'true' : 'false'}">
-                        <template part='item-template' replaceable>
-                            ${item}
-                        </template>
-                    </li>
+                    <template part='items-template' replaceable>
+                        <li repeat.for="item of items"
+                            class="select2-results__option ${item == highlighted ? 'select2-results__option--highlighted':''}" 
+                            element.ref="item._element"
+                            role="treeitem" 
+                            click.delegate="onClickItem($index)"
+                            mouseover.delegate="highlight($index)"
+                            show.bind="!searching || item._isMatch"
+                            aria-selected="${item == selectedObject ? 'true' : 'false'}">
+                            <template part='item-template' replaceable>
+                                ${item}
+                            </template>
+                        </li>
+                    </template>
                 </ul>
                 <span style="display:none">
                     <!-- odd, aurelia doesn't notice the updates to highlighted unless this is here -->

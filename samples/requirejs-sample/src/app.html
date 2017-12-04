@@ -18,22 +18,49 @@
         </paj-combobox>
     </div>
     <div>
-        <!-- :( -->
         <paj-combobox data-source.bind="dataSource" selected-id.bind="selectedNumber2" width: "300px" select-closes.bind="false">
             <template replace-part="item-template">
                 <div>
-                    <h4><input type='checkbox' checked.bind='dataState[item.id]' click.delegate='checky($event, item)' /> ${item.id}</h4>
-                    
-                    <i>${dataStateStr}</i>
+                    <h4>
+                        <input
+                            type='checkbox'
+                            checked.bind='dataState[item.id]'
+                            click.delegate='checky($event, item)' />
+                        ${item.id}
+                    </h4>
                 </div>
             </template>
             <template replace-part="selected-template">
                 ~ ${selectedObject.id} ~
             </template>
         </paj-combobox>
-
     </div>
-
-    <input type='checkbox' checked.bind='dataState["tacos"]' />
-    <button click.delegate="abc()"> Update</button> ${dataStateStr}
+    <div>
+        <!-- :( -->
+        <paj-combobox data-source.bind="dataSource" selected-id.bind="selectedNumber3" width: "300px" select-closes.bind="false" view-model.ref="box2">
+            <template replace-part="items-template">
+                <li repeat.for="item of items"
+                    class="select2-results__option ${item == box2.highlighted ? 'select2-results__option--highlighted':''}"
+                    element.ref="item._element"
+                    role="treeitem"
+                    click.delegate="box2.onClickItem($index)"
+                    mouseover.delegate="box2.highlight($index)"
+                    show.bind="!box2.searching || item._isMatch"
+                    aria-selected="${item == box2.selectedObject ? 'true' : 'false'}">
+                    <div>
+                        <h4>
+                            <input
+                                type='checkbox'
+                                checked.bind='dataState[item.id]'
+                                click.delegate='checky($event, item)' />
+                            ${item.id}
+                        </h4>
+                    </div>
+                </li>
+            </template>
+            <template replace-part="selected-template">
+                ~ ${selectedObject.id} ~
+            </template>
+        </paj-combobox>
+    </div>
 </template>

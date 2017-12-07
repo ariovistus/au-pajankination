@@ -9,7 +9,7 @@
             <span class="select2-selection select2-selection--single" 
                   role="combobox" aria-haspopup="true" aria-expanded="false" 
                   tabindex="0" aria-labeledby="select2-SupervisorId-container">
-                <span class="select2-selection__rendered" id="select2-SupervisorId-container" title="Newcomer, Ellery Analyst/Developer"> 
+                <span class="select2-selection__rendered"> 
                     <span class="select2-selection__clear" show.bind="selectedObject != null">x</span>
                     <span part="selected-template" replaceable>
                         ${selectedObject}
@@ -39,8 +39,16 @@
                        autocapitalize="off" spellcheck="false" role="textbox"/>
             </span>
             <span class="select2-results">
-                <ul class="select2-results__options" role="tree" id="select2-SupervisorId-results" aria-expanded="true" aria-hidden="false" scroll.trigger="dunscrolled($event) & throttle:250" scrolltop.bind="dropdownScrollTop">
+                <ul 
+                    class="select2-results__options" 
+                    role="tree" 
+                    aria-expanded="true" 
+                    aria-hidden="false" 
+                    scroll.trigger="dunscrolled($event) & throttle:250" 
+                    scrolltop.bind="dropdownScrollTop">
+
                     <li 
+                        part='searching-template' replaceable
                         class="select2-results__option loading-results"
                         role="treeitem" aria-disabled="true" 
                         element.ref="searchElement"
@@ -49,6 +57,7 @@
                     </li>
 
                     <li 
+                        part='no-results-template' replaceable
                         class="select2-results__option select2-results_message" 
                         if.bind="noResults" 
                         element.ref="noResultsElement"
@@ -56,20 +65,19 @@
                         No results found
                     </li>
 
-                    <template part='items-template' replaceable>
-                        <li repeat.for="item of items"
-                            class="select2-results__option ${item == highlighted ? 'select2-results__option--highlighted':''}" 
-                            element.ref="item._element"
-                            role="treeitem" 
-                            click.delegate="onClickItem($index)"
-                            mouseover.delegate="highlight($index)"
-                            show.bind="!searching || item._isMatch"
-                            aria-selected="${item == selectedObject ? 'true' : 'false'}">
-                            <template part='item-template' replaceable>
-                                ${item}
-                            </template>
-                        </li>
-                    </template>
+                    <li repeat.for="item of items"
+                        part='items-template' replaceable
+                        class="select2-results__option ${item == highlighted ? 'select2-results__option--highlighted':''}" 
+                        element.ref="item._element"
+                        role="treeitem" 
+                        click.delegate="onClickItem($index)"
+                        mouseover.delegate="highlight($index)"
+                        show.bind="!searching || item._isMatch"
+                        aria-selected="${item == selectedObject ? 'true' : 'false'}">
+                        <template part='item-template' replaceable>
+                            ${item}
+                        </template>
+                    </li>
                 </ul>
                 <span style="display:none">
                     <!-- odd, aurelia doesn't notice the updates to highlighted unless this is here -->

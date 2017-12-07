@@ -139,6 +139,22 @@ export class ComboBox {
         this.items.push.apply(this.items, this.nextPage)
     }
 
+    private shiftItemsUp(popFrontCount) {
+        for(var i = 0; i < popFrontCount; i++) {
+            this.items.shift();
+        }
+        this.items.push.apply(this.items, this.nextPage)
+    }
+
+    private shiftItemsDown(popBackCount) {
+        for(var i = 0; i < popBackCount; i++) {
+            this.items.pop();
+        }
+        for(var i = 0; i < this.previousPage.length; i++) {
+            this.items.unshift(this.previousPage[this.previousPage.length-i-1]);
+        }
+    }
+
     private getPage(take, skip, searchText): Promise<IComboboxResults> {
         return this.dataSource.getPage(take, skip, searchText).then(results => {
             this.maxPageIndex = Math.floor(results.count / this.pageSize);
@@ -248,15 +264,16 @@ export class ComboBox {
                     this.physicalSelectedIndex += results.rows.length;
                 }
                 oldVisibleIndex += results.rows.length;
+                var popBackCount = this.nextPage.length;
                 this.nextPage = this.currentPage;
                 this.currentPage = this.previousPage;
                 this.previousPage = results.rows;
                 this.previousPageIndex--;
                 this.currentPageIndex--; // decrement(currentPageState)
                 this.nextPageIndex--;
-                this.rebuildItems();
+                this.shiftItemsDown(popBackCount);
                 return this.waitWhile({
-                    predicate: () => this.previousPage.length > 0 && this.previousPage[this.previousPage.length-1]._element == null,
+                    predicate: () => this.previousPage.length > 0 && this.previousPage[0]._element == null,
                     onComplete: () => {
                         let newVisibleIndex = this.physicalIndexFromScrollTop(this.dropdownScrollTop);
                         if(oldVisibleIndex != newVisibleIndex) {
@@ -306,13 +323,14 @@ export class ComboBox {
                 }else{
                     this.physicalSelectedIndex -= this.previousPage.length;
                 }
+                var popFrontCount = this.previousPage.length;
                 this.previousPage = this.currentPage;
                 this.currentPage = this.nextPage;
                 this.nextPage = results.rows;
                 this.previousPageIndex++;
                 this.currentPageIndex++; // increment(currentPageState)
                 this.nextPageIndex++;
-                this.rebuildItems();
+                this.shiftItemsUp(popFrontCount);
 
                 return this.waitWhile({
                     predicate: () => this.nextPage.length > 0 && this.nextPage[this.nextPage.length-1]._element == null,

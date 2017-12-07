@@ -15,3 +15,4 @@ typings/
 *.tgz
 *.d.ts
 *.log
+yarn.lock

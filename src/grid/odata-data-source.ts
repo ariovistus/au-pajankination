@@ -1,5 +1,7 @@
 import { IGridDataSource, IGridResults, IOrderBy, IGridSearchableColumn } from "./interfaces";
 
+import * as URI from "urijs";
+
 export class OdataParams {
     public take: number;
     public skip: number;
@@ -7,15 +9,43 @@ export class OdataParams {
     public orderby: string;
 
     public makeQueryParams(): string {
-        return "";
+        let result = this.makeQueryParamObj();
+        let uri = new URI("");
+        uri.addQuery(result);
+        let querystring = uri.query() + "&";
+        if (querystring[0] == "?") {
+            querystring = querystring.substr(1);
+        }
+        return querystring;
     }
 
     public makeQueryParamObj(): any {
-        return {};
+        const shouldIncludeFilter = this.filter != null && (typeof this.filter != "string" || this.filter !== "");
+        const shouldIncludeOrderby = this.orderby != null && (typeof this.orderby != "string" || this.orderby !== "");
+        let result = {
+            "$count": "true",
+        };
+        if (this.take > 0) {
+            result["$top"] = this.take;
+        }
+
+        if (this.skip > 0) {
+            result["$skip"] = this.skip;
+        }
+
+        if (shouldIncludeFilter) {
+            result["$filter"] = this.filter;
+        }
+
+        if (shouldIncludeOrderby) {
+            result["$orderby"] = this.orderby;
+        }
+        return result;
     }
 
-    public serializeString(str: string): string {
-        return str;
+    public static serializeString(str: string): string {
+        let escapedStr = str.replace(/'/g, "''");
+        return "'" + escapedStr + "'";
     }
 }
 

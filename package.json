@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "aurelia-framework": "^1.0.0",
-    "keycode": "^2.1.9"
+    "keycode": "^2.1.9",
+    "urijs": "^1.19.1"
   }
 }
-

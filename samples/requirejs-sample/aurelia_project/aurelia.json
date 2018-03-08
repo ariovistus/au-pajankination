@@ -91,16 +91,11 @@
           },
           {
               "name": "au-pajankination",
-              "main": "combobox",
+              "main": "index",
               "path": "../node_modules/au-pajankination/dist",
               "resources": [
-                  "combobox.html",
-                  "select2.css",
-                  "static.html",
-                  "grid/grid.css",
-                  "grid/paj-grid.html",
-                  "grid/grid-sort-header.html",
-                  "grid/grid-sort-icon.html"
+                  "**/*.html",
+                  "**/*.css"
               ]
           }
         ]

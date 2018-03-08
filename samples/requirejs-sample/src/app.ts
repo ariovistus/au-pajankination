@@ -3,7 +3,6 @@ import { SpoofedDataSource, SpoofedDataSource2 } from "./data-source";
 
 @autoinject
 export class App {
-    message = 'Hello World!';
     mahclasses = "honk claptrap";
     dataSource: SpoofedDataSource;
     gridDataSource: SpoofedDataSource2;

@@ -1,44 +1,35 @@
 ﻿import { bindable, customElement, computedFrom, autoinject } from "aurelia-framework";
 import { BindingEngine, Disposable } from "aurelia-binding";
-import { IGrid, IGridRow, IGridColumn, IGridDataSource, IGridResults } from "./interfaces";
+import { IGrid, IGridRow, IGridDataSource, IGridResults } from "./interfaces";
 
 @customElement("paj-grid")
-@bindable("dataSource")
-@bindable("columns")
-@bindable("rows")
-@bindable("currentPage")
-@bindable("waiting")
-@bindable("failure")
-@bindable("searchFailed")
-@bindable("showSearch")
 @autoinject
 export class PaginatedGrid implements IGrid {
     @bindable({ defaultValue: 10 }) pageSize: number = 10;
-    currentPage: number;
-    searchText: string;
-    waiting: boolean;
-    searchWaiting: boolean;
-    failure: boolean;
-    searchFailed: boolean;
+    @bindable currentPage: number;
+    @bindable waiting: boolean;
+    @bindable failure: boolean;
+    @bindable searchWaiting: boolean;
+    @bindable searchFailed: boolean;
     @bindable({ defaultValue: false }) showSearch: boolean;
-
-    numberOfItems: number;
-    startNumber: number;
-    endNumber: number;
 
     @bindable({ defaultValue: [10, 20, 50] }) pageSizes: number[] = [10, 20, 50];
 
     @bindable() register: any;
 
-    private _parent: any;
-    dataSource: IGridDataSource;
+    @bindable dataSource: IGridDataSource;
 
-    columns: IGridColumn[];
-    rows: IGridRow[];
-    orderbyName: string;
-    orderbyAsc: boolean;
+    @bindable rows: IGridRow[];
     @bindable({ defaultValue: null }) defaultOrderbyName: string;
     @bindable({ defaultValue: true }) defaultOrderbyAsc: boolean;
+
+    private _parent: any;
+    numberOfItems: number;
+    startNumber: number;
+    endNumber: number;
+    searchText: string;
+    orderbyName: string;
+    orderbyAsc: boolean;
 
     private searchOutOfSync: boolean;
     public hide: boolean;
@@ -198,7 +189,7 @@ export class PaginatedGrid implements IGrid {
     goToPage(p: number): Promise<IGridResults> {
         this.waiting = true;
         return this.dataSource
-            .getPage(this.pageSize, this.pageSize * (p - 1), this.buildFilter(), this.buildOrderby())
+            .getPage(this.pageSize, this.pageSize * (p - 1), this.searchText, { name: this.orderbyName, ascending: this.orderbyAsc })
             .then(data => {
                 var possibleEnd = p * this.pageSize;
                 this.waiting = false;
@@ -224,45 +215,6 @@ export class PaginatedGrid implements IGrid {
                 return null;
             });
     };
-
-    buildFilter(): string {
-        if (this.searchText == null || this.searchText.trim() == "") {
-            return null;
-        }
-
-        var columns = this.dataSource.searchableColumns || [];
-
-        var filter = columns.map(column => this.substringOfPart(column)).join(" or ");
-        return filter;
-    }
-
-    buildOrderby(): string {
-        let orderby = null;
-        if (this.orderbyName != null) {
-            orderby = this.orderbyName + (this.orderbyAsc ? " asc" : " desc");
-        }
-        return orderby;
-    }
-
-    substringOfPart(column: any): string {
-        return `substringof(${this.odataEncodedString(this.searchText.trim())}, ${column.name}) eq true`;
-    }
-
-    odataEncodedString(str: string): string {
-        //EncodeURI does too much for oData
-        str = str.replace("?", "%3F")
-            .replace(":", "%3A")
-            .replace("@", "%40")
-            .replace("&", "%26")
-            .replace("=", "%3D")
-            .replace("+", "%2B")
-            .replace("$", "%24")
-            .replace("#", "%23");
-
-        var value = str.split("'").join("''");
-        value = `'${value}'`;
-        return value;
-    }
 
     onSearchKeyup(evnt: Event) {
         this.searchWaiting = true;

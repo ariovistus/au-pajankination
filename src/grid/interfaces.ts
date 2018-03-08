@@ -1,18 +1,3 @@
-export interface IGridColumn {
-    title: string;
-    name?: string;
-    sortableName?: string;
-    sortable?: boolean;
-    filterable?: boolean;
-    visible?: boolean;
-    showable?: boolean;
-    type?: string;
-    template?: string;
-    customTemplate?: boolean;
-    css?: any;
-}
-
-
 export interface IGridRow {
     columns: {};
 }
@@ -40,7 +25,6 @@ export interface IGrid {
     lastPage(): void;
     goToPage(p: number): Promise<IGridResults>;
 
-    columns: IGridColumn[];
     rows: IGridRow[];
 }
 
@@ -48,10 +32,13 @@ export interface IGridSearchableColumn {
     name: string;
 }
 
+export interface IOrderBy {
+    name: string;
+    ascending: boolean;
+}
+
 export interface IGridDataSource {
-    sorts: IGridSort[];
-    getPage(take: number, skip: number, searchText: string, orderbyText: string): Promise<IGridResults>;
-    count: number;
+    getPage(take: number, skip: number, searchText: string, orderby: IOrderBy): Promise<IGridResults>;
     searchableColumns?: IGridSearchableColumn[];
 }
 

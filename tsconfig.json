@@ -12,10 +12,12 @@
         "inlineSources": true
     },
     "files": [
+        "./src/index.ts",
         "./src/interfaces.ts",
         "./src/combobox.ts",
         "./src/static.ts",
         "./src/grid/interfaces.ts",
+        "./src/grid/odata-data-source.ts",
         "./src/grid/grid-sort-header.ts",
         "./src/grid/grid-sort-icon.ts",
         "./src/grid/paj-grid.ts"

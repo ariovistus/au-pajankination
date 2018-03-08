@@ -1,66 +1,72 @@
 <template>
-    <require from="au-pajankination/combobox"></require>
-    <require from="au-pajankination/grid/paj-grid"></require>
-    <require from="au-pajankination/grid/grid-sort-header"></require>
-    <require from="bootstrap/css/bootstrap.css"></require>
-    <require from="font-awesome/font-awesome.css"></require>
-    <require from="./style.css"></require>
-    <h1>${message}</h1>
+  <require from="bootstrap/css/bootstrap.css"></require>
+  <require from="font-awesome/font-awesome.css"></require>
+  <require from="./style.css"></require>
 
-    <div>
-        <paj-combobox data-source.bind="dataSource" selected-id.bind="selectedNumber1" width: "300px">
-            <template replace-part="item-template">
-                <div>
-                    <h4> ${item.id}</h4>
-                    
-                    <i>~ ${item.id} ~</i>
-                </div>
-            </template>
-            <template replace-part="selected-template">
-                ~ ${selectedObject.id} ~
-            </template>
-        </paj-combobox>
+  <div class='container-fluid'>
+    <h1>Demo</h1>
+
+    <div class='well'>
+      <h2> paj-combobox </h2>
+      <p> these examples use a contrived data source; you would probably want to point them at an api in real life </p>
+      <paj-combobox data-source.bind="dataSource" selected-id.bind="selectedNumber1" width: "300px">
+        <template replace-part="item-template">
+          <div>
+            <h4> ${item.id}</h4>
+
+            <i>~ ${item.id} ~</i>
+          </div>
+        </template>
+        <template replace-part="selected-template">
+          ~ ${selectedObject.id} ~
+        </template>
+      </paj-combobox>
     </div>
-    <div>
-        <paj-combobox data-source.bind="dataSource" selected-id.bind="selectedNumber2" width: "300px" select-closes.bind="false">
-            <template replace-part="item-template">
-                <div>
-                    <h4>
-                        <input
-                            type='checkbox'
-                            checked.bind='dataState[item.id]'
-                            click.delegate='checky($event, item)' />
-                        ${item.id}
-                    </h4>
-                </div>
-            </template>
-            <template replace-part="selected-template">
-                ~ ${selectedObject.id} ~
-            </template>
-        </paj-combobox>
+    <div class='well'>
+      <h2> paj-combobox </h2>
+      <p> with interactive components. Note the resulting data items are quite ephemeral, so any state you want to persist beyond pretty much any user interaction needs to be stored separately. </p>
+      <paj-combobox data-source.bind="dataSource" selected-id.bind="selectedNumber2" width: "300px" select-closes.bind="false">
+        <template replace-part="item-template">
+          <div>
+            <h4>
+              <input
+                  type='checkbox'
+                  checked.bind='dataState[item.id]'
+                  click.delegate='checky($event, item)' />
+              ${item.id}
+            </h4>
+          </div>
+        </template>
+        <template replace-part="selected-template">
+          ~ ${selectedObject.id} ~
+        </template>
+      </paj-combobox>
     </div>
 
-    <div>
+    <div class='well'>
+      <h2> paj-grid </h2>
+      <p> contrived data source, and a search that accepts a number and filters by divisibility </p>
 
-        <paj-grid data-source.bind="gridDataSource" show-search.bind='true' view-model.ref='grid'>
-            <template replace-part='header'>
-                <div class='div-tr'>
-                    <sort-header column='id' grid.bind='grid'>ID</sort-header>
-                    <div class='div-th'>
-                        Something else
-                    </div>
-                </div>
-            </template>
-            <template replace-part='body'>
-                <div class='div-tr' repeat.for='row of rows'>
-                    <div class='div-td'>
-                        ${row.id}
-                    </div>
-                    <div class='div-td'>
-                        ${(row.id+1)%99}
-                    </div>
-                </div>
-            </template>
-        </paj-grid>
+      <paj-grid data-source.bind="gridDataSource" show-search.bind='true' view-model.ref='grid'>
+        <template replace-part='header'>
+          <div class='div-tr'>
+            <sort-header column='id' grid.bind='grid'>ID</sort-header>
+            <div class='div-th'>
+              Something else
+            </div>
+          </div>
+        </template>
+        <template replace-part='body'>
+          <div class='div-tr' repeat.for='row of rows'>
+            <div class='div-td'>
+              ${row.id}
+            </div>
+            <div class='div-td'>
+              ${(row.id+1)%99}
+            </div>
+          </div>
+        </template>
+      </paj-grid>
     </div>
+  </div>
 </template>

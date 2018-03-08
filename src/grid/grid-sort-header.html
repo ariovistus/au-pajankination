@@ -1,0 +1,7 @@
+<template>
+    <require from="./grid-sort-icon"></require>
+    <div class='paj-grid-sortable' click.trigger="grid.sortby(column)">
+        <slot></slot>
+        <sort-icon column.bind='column' grid.bind="grid"></sort-icon>
+    </div>
+</template>

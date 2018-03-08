@@ -1,0 +1,80 @@
+﻿<template>
+    <require from="./grid.css"></require>
+    <div show.bind="showSearch">
+        <div class="row">
+
+            <div class="col-sm-3 pull-right input-group paj-grid-search-group">
+                <input type="text" class="form-control paj-grid-search-input" value.bind="searchText" keyup.trigger="onSearchKeyup($event) & debounce:400" />
+                <div class="input-group-btn">
+                <button type="button" class="btn btn-default" label="Search">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+                <button type="button" class="btn btn-default" label="Clear Search" click.trigger="clearSearch()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                </div>
+            </div>
+            <div class="col-sm-1 pull-right">
+                <span show.bind="searchWaiting" class="glyphicon glyphicon-refresh spinning"></span>
+                <span show.bind="searchFailed" class="glyphicon glyphicon-warning-sign"></span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="horizontal-scroll">
+        <div class="div-table table table-striped">
+            <div class='div-thead thead-default'>
+                <template part='header' replaceable>
+                </template>
+            </div>
+            <div class='div-tbody'>
+                <template part='body' replaceable>
+                </template>
+            </div>
+        </div>
+    </div>
+    <div class="paj-grid-pagination">
+        <div class="paj-grid-page-selector">
+            <ul class="pagination">
+                <li class="paj-grid-first ${atFirst ? 'disabled' : ''}" click.trigger="firstPage()" disabled.bind="atFirst" aria-label="First">
+                    <a href=" ">
+                        <span aria-hidden="true" class="glyphicon glyphicon-step-backward"></span>
+                    </a>
+                </li>
+                <li class="paj-grid-prev ${atFirst ? 'disabled' : ''}" click.trigger="previousPage()" disabled.bind="atFirst" aria-label="Previous">
+                    <a href=" ">
+                        <span aria-hidden="true" class="glyphicon glyphicon-triangle-left"></span>
+                    </a>
+                </li>
+
+                <li repeat.for="i of enumerablePages" click.trigger="probablyGoToPage(i)" class="paj-grid-ith ${i == currentPage ? 'active': ''}">
+                    <a href=" ">${i}</a>
+                </li>
+                <li class="paj-grid-next ${atLast ? 'disabled' : ''}" click.trigger="nextPage()" disabled.bind="atLast" aria-label="Next">
+                    <a href=" ">
+                        <span aria-hidden="true" class="glyphicon glyphicon-triangle-right"></span>
+                    </a>
+                </li>
+                <li class="paj-grid-last ${atLast ? 'disabled' : ''}" click.trigger="lastPage()" disabled.bind="atLast" aria-label="Last">
+                    <a href=" ">
+                        <span aria-hidden="true" class="glyphicon glyphicon-step-forward"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="paj-grid-items-per-page-selector">
+            <label>Items Per Page:</label>
+            <select class="form-control" value.bind="pageSize" style="width: 70px; display:inline">
+                <option repeat.for="n of pageSizes" mode.bind="n">${n}</option>
+            </select>
+            <span show.bind="waiting" class="fa fa-spinner fa-spin"></span>
+            <span show.bind="failure" class="glyphicon glyphicon-warning-sign"></span>
+        </div>
+
+        </div>
+        <div class="paj-grid-item-counter">
+            ${startNumber} - ${endNumber} of ${numberOfItems}
+        </div>
+</template>

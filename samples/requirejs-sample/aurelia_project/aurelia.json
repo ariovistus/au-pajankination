@@ -76,13 +76,31 @@
           "text",
           "keycode",
           {
+              "name": "font-awesome",
+              "path": "../node_modules/font-awesome/css",
+              "resources": [
+                  "font-awesome.css"
+              ]
+          },
+          {
+              "name": "bootstrap",
+              "path": "../node_modules/bootstrap/dist",
+              "resources": [
+                  "css/bootstrap.css"
+              ]
+          },
+          {
               "name": "au-pajankination",
               "main": "combobox",
               "path": "../node_modules/au-pajankination/dist",
               "resources": [
                   "combobox.html",
                   "select2.css",
-                  "static.html"
+                  "static.html",
+                  "grid/grid.css",
+                  "grid/paj-grid.html",
+                  "grid/grid-sort-header.html",
+                  "grid/grid-sort-icon.html"
               ]
           }
         ]

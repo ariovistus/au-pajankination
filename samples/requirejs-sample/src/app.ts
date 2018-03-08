@@ -1,15 +1,17 @@
-import {autoinject} from "aurelia-framework";
-import {SpoofedDataSource} from "./data-source";
+import { autoinject } from "aurelia-framework";
+import { SpoofedDataSource, SpoofedDataSource2 } from "./data-source";
 
 @autoinject
 export class App {
     message = 'Hello World!';
     mahclasses = "honk claptrap";
     dataSource: SpoofedDataSource;
+    gridDataSource: SpoofedDataSource2;
     dataState: any;
 
     constructor() {
         this.dataSource = new SpoofedDataSource();
+        this.gridDataSource = new SpoofedDataSource2();
         this.dataState = {};
     }
 

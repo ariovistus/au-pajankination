@@ -1,0 +1,83 @@
+.grid-pagenum {
+    margin: 20px 0; 
+    width: 300px; 
+    display: inline-block; 
+    vertical-align: top;
+}
+
+.paj-grid-pagination {
+    display: inline-block;
+}
+
+.paj-grid-pagination .paj-grid-page-selector {
+    float:left;
+}
+.paj-grid-pagination  .paj-grid-items-per-page-selector {
+    float: left;
+    height: 85px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.paj-grid-search-input::-ms-clear {
+    display: none;
+}
+.paj-grid-item-counter {
+    float: right;
+    margin-top: 20px;
+}
+
+.paj-grid-search-group {
+    margin-right: 15px;
+}
+
+.paj-grid-sortable {
+    cursor: pointer;
+}
+
+paj-grid .horizontal-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.div-table {
+    display: table;
+    width: 100%;
+}
+
+.div-tbody {
+    display: table-row-group;
+}
+
+.div-thead {
+    display: table-row-group;
+}
+
+.div-tr {
+    display: table-row;
+    width: 100%;
+}
+
+.div-th,.div-td, sort-header {
+    display: table-cell;
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.div-th, sort-header {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+    font-weight: bold;
+}
+
+.div-tr:first-child > .div-th,
+.div-tr:first-child > sort-header,
+.div-tr:first-child > .div-td {
+    border-top: 0;
+}
+
+.table-striped > .div-tbody > .div-tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}

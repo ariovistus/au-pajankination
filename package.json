@@ -1,6 +1,6 @@
 {
   "name": "au-pajankination",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "license": "MIT",
   "typings": "./dist/interfaces.d.ts",
   "repository": {

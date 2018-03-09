@@ -7,6 +7,7 @@ services:
 script:
 - bash build_npm.sh
 deploy:
+  skip_cleanup: true
   provider: npm
   email: ellery-newcomer@utulsa.edu
   on: 

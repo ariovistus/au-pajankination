@@ -61,7 +61,7 @@ export abstract class OdataDataSource implements IGridDataSource {
         odataParams.filter = this.buildFilter(searchText);
         odataParams.orderby = this.buildOrderby(orderby);
 
-        return Promise.resolve({count: 0, rows: []});
+        return this.odataRequest(odataParams);
     }
 
     public buildFilter(searchText: string): string {

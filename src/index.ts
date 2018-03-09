@@ -11,6 +11,7 @@ export function configure(aurelia: FrameworkConfiguration, callback = null) {
     let config = {
         noGlobalResources: false,
     };
+
     if(callback != null && typeof callback == "function") {
         callback(config);
     }

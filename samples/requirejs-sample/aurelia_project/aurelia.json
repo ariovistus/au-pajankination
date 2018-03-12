@@ -75,6 +75,8 @@
           },
           "text",
           "keycode",
+          "extend",
+          "aurelia-view-manager",
           {
               "name": "font-awesome",
               "path": "../node_modules/font-awesome/css",

@@ -1,6 +1,6 @@
 {
   "name": "au-pajankination",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "typings": "./dist/interfaces.d.ts",
   "repository": {
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "aurelia-framework": "^1.0.0",
+    "aurelia-view-manager": "^0.1.1",
     "keycode": "^2.1.9",
     "urijs": "^1.19.1"
   }

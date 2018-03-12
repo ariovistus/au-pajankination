@@ -1,8 +1,10 @@
 ﻿import { bindable, customElement, computedFrom, autoinject } from "aurelia-framework";
+import { resolvedView } from "aurelia-view-manager";
 import { BindingEngine, Disposable } from "aurelia-binding";
 import { IGrid, IGridRow, IGridDataSource, IGridResults } from "./interfaces";
 
 @customElement("paj-grid")
+@resolvedView("ariovistus/au-pajankination", "grid")
 @autoinject
 export class PaginatedGrid implements IGrid {
     @bindable({ defaultValue: 10 }) pageSize: number = 10;

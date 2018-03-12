@@ -1,0 +1,89 @@
+<template>
+  <require from="au-pajankination/combobox/bootstrap/select2.css"></require>
+
+  MOOO
+    <span class="select2 select2-container select2-container--default select2-container--below"
+          css="width:${width}; max-width: ${maxWidth};"
+        element.ref="displayElement"
+        click.delegate="onClick($event)">
+        <span class="selection">
+            <span class="select2-selection select2-selection--single" 
+                  role="combobox" aria-haspopup="true" aria-expanded="false" 
+                  tabindex="0" aria-labeledby="select2-SupervisorId-container">
+                <span class="select2-selection__rendered"> 
+                    <span class="select2-selection__clear" show.bind="selectedObject != null">x</span>
+                    <span part="selected-template" replaceable>
+                        ${selectedObject}
+                    </span>
+                </span>
+                <span class="select2-selection__arrow" role="presentation">
+                    <b role="presentation"></b>
+                </span>
+            </span>
+        </span>
+        <span class="dropdown-wrapper">
+        </span>
+    </span>
+
+
+    <span class="select2-container select2-container--default select2-container--open"
+        show.bind="opened"
+        element.ref="dropdownElement"
+        style="position: absolute;">
+        <span class="select2-dropdown select2-dropdown--above" dir="ltr">
+            <span class="select2-search select2-search--dropdown">
+                <input class="select2-search__field" 
+                       value.bind="searchText"
+                       keydown.delegate="onSearchKeydown($event) & debounce"
+                       element.ref="searchTextElement"
+                       type='search' tabindex="0" autocomplete="off" autocorrect="off" 
+                       autocapitalize="off" spellcheck="false" role="textbox"/>
+            </span>
+            <span class="select2-results">
+                <ul 
+                    class="select2-results__options" 
+                    role="tree" 
+                    aria-expanded="true" 
+                    aria-hidden="false" 
+                    scroll.trigger="dunscrolled($event) & throttle:250" 
+                    scrolltop.bind="dropdownScrollTop">
+
+                    <li 
+                        part='searching-template' replaceable
+                        class="select2-results__option loading-results"
+                        role="treeitem" aria-disabled="true" 
+                        element.ref="searchElement"
+                        show.bind="searching">
+                        Searching...
+                    </li>
+
+                    <li 
+                        part='no-results-template' replaceable
+                        class="select2-results__option select2-results_message" 
+                        if.bind="noResults" 
+                        element.ref="noResultsElement"
+                        role="treeitem" aria-live="assertive">
+                        No results found
+                    </li>
+
+                    <li repeat.for="item of items"
+                        class="select2-results__option ${item == highlighted ? 'select2-results__option--highlighted':''}" 
+                        element.ref="item._element"
+                        role="treeitem" 
+                        click.delegate="onClickItem($index)"
+                        mouseover.delegate="highlight($index)"
+                        show.bind="!searching || item._isMatch"
+                        aria-selected="${item == selectedObject ? 'true' : 'false'}">
+                        <template part='item-template' replaceable>
+                            ${item}
+                        </template>
+                    </li>
+                </ul>
+                <span style="display:none">
+                    <!-- odd, aurelia doesn't notice the updates to highlighted unless this is here -->
+                    ${highlighted}
+                </span>
+            </span>
+        </span>
+    </span>
+</template>

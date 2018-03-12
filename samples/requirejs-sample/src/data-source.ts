@@ -1,5 +1,5 @@
 
-import { IComboboxDataSource, IComboboxResults } from "au-pajankination/interfaces";
+import { IComboboxDataSource, IComboboxResults } from "au-pajankination/combobox/interfaces";
 import { IGridDataSource, IGridResults, IOrderBy } from "au-pajankination/grid/interfaces";
 
 

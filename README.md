@@ -9,6 +9,15 @@ npm install au-pajankination
 for requirejs cli, add to aurelia.json
 
 ```
+  "extend",
+  "aurelia-view-manager",
+  "keycode",
+  {
+    "name": "urijs",
+    "main": "./src/URI",
+    "path": "../node_modules/urijs"
+  },
+  "punycode",
   {
       "name": "au-pajankination",
       "main": "index",
@@ -19,6 +28,8 @@ for requirejs cli, add to aurelia.json
       ]
   }
 ```
+
+(urijs and punycode are only used by the odata helper and are kind of optional)
 
 to your main add
 
@@ -74,7 +85,22 @@ simple example:
 
 ## custom templates
 
-TODO
+you can replace the html template used by paj-combobox:
+
+in your main:
+
+```
+    import { Config } from "aurelia-view-manager";
+
+    ...
+
+    aurelia.container.get(Config)
+    .configureNamespace("ariovistus/au-pajankination", {
+      map: {
+        "combobox": "my-combobox.html",
+      }
+    });
+```
 
 # paj-grid
 
@@ -131,4 +157,20 @@ use this to add sorting functionality to a column:
 
 The default html template for `paj-grid` uses bootstrap 3 and font-awesome css.
 
-If you don't want that, then TODO
+If you don't want that, you can replace the html template used by paj-grid.
+
+In your main:
+
+```
+    import { Config } from "aurelia-view-manager";
+
+    ...
+
+    aurelia.container.get(Config)
+    .configureNamespace("ariovistus/au-pajankination", {
+      map: {
+        "grid": "my-grid.html",
+        "grid-sort-icon": "my-grid-sort-icon.html",
+      }
+    });
+```

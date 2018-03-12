@@ -1,8 +1,10 @@
 import { IComboboxDataSource as IDataSource, IComboboxResults, IComboboxRow } from "./interfaces";
+import { resolvedView } from "aurelia-view-manager";
 import { bindable, bindingMode, autoinject, customElement } from "aurelia-framework";
 import * as keycode from "keycode";
 
 @customElement("paj-combobox")
+@resolvedView("ariovistus/au-pajankination", "combobox")
 @autoinject
 export class ComboBox {
     @bindable dataSource: IDataSource;

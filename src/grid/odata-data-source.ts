@@ -1,8 +1,8 @@
-import { IGridDataSource, IGridResults, IOrderBy, IGridSearchableColumn } from "./interfaces";
+import { IGridDataSource, IGridResults, IOrderBy, IGridSearchableColumn, IOdataParams } from "./interfaces";
 
 import * as URI from "urijs";
 
-export class OdataParams {
+export class OdataParams implements IOdataParams {
     public take: number;
     public skip: number;
     public filter: string;
@@ -52,10 +52,14 @@ export class OdataParams {
 export abstract class OdataDataSource implements IGridDataSource {
     searchableColumns: IGridSearchableColumn[];
 
-    public abstract odataRequest(odata: OdataParams): Promise<IGridResults>;
+    public abstract odataRequest(odata: IOdataParams): Promise<IGridResults>;
+
+    public makeOdataParams(): IOdataParams {
+        return new OdataParams();
+    }
 
     public getPage(take: number, skip: number, searchText: string, orderby: IOrderBy): Promise<IGridResults> {
-        let odataParams = new OdataParams();
+        let odataParams = this.makeOdataParams();
         odataParams.take = take;
         odataParams.skip = skip;
         odataParams.filter = this.buildFilter(searchText);

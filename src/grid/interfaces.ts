@@ -42,3 +42,13 @@ export interface IGridDataSource {
     searchableColumns?: IGridSearchableColumn[];
 }
 
+export interface IOdataParams {
+    take: number;
+    skip: number;
+    filter: string;
+    orderby: string;
+
+    makeQueryParams(): string;
+
+    makeQueryParamObj(): any;
+}

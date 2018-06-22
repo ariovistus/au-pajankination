@@ -15,6 +15,7 @@ export class ComboBox {
     @bindable({defaultValue: 20}) pageSize: number; // pagingParams
 
     @bindable({defaultValue: true}) selectCloses: boolean;
+    @bindable({defaultValue: false}) suppressSelect: boolean;
 
     previousPageIndex: number; // previousPageState
     currentPageIndex: number; // currentPageState
@@ -411,13 +412,15 @@ export class ComboBox {
     }
 
     onClickItem(index, clickEvent) {
-        this.select(index);
-        if(index < this.items.length && index >= 0) {
-            this.scrollItemToView(index);
-        }
+        if(!this.suppressSelect) {
+            this.select(index);
+            if(index < this.items.length && index >= 0) {
+                this.scrollItemToView(index);
+            }
 
-        if(this.selectCloses) {
-            this.closeDropdown();
+            if(this.selectCloses) {
+                this.closeDropdown();
+            }
         }
         return true;
     }

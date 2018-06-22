@@ -1,10 +1,10 @@
-rm -recurse -force dist/*
-mkdir -p dist -force
-mkdir -p dist/grid -force
-cp src/select2.css dist
-cp src/grid/grid.css dist/grid
-cp src/*.html dist
-cp src/grid/*.html dist/grid
+#rm -recurse -force dist/*
+mkdir -force dist/combobox/bootstrap
+mkdir -force dist/grid/bootstrap
+cp src/combobox/bootstrap/*.css dist/combobox/bootstrap
+cp src/combobox/bootstrap/*.html dist/combobox/bootstrap
+cp src/grid/bootstrap/*.css dist/grid/bootstrap
+cp src/grid/bootstrap/*.html dist/grid/bootstrap
 docker run -v "$(pwd):/app" --entrypoint yarn sandrokeil/typescript install
 docker run -v "$(pwd):/app" --entrypoint python sandrokeil/typescript versionchecker.py
 docker run -v "$(pwd):/app" --entrypoint tsc sandrokeil/typescript -p . --outDir dist

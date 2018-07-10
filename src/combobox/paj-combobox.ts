@@ -16,6 +16,7 @@ export class ComboBox {
 
     @bindable({defaultValue: true}) selectCloses: boolean;
     @bindable({defaultValue: false}) suppressSelect: boolean;
+    @bindable({defaultValue: false}) disabled: boolean;
 
     previousPageIndex: number; // previousPageState
     currentPageIndex: number; // currentPageState
@@ -402,6 +403,8 @@ export class ComboBox {
     }
 
     public onClick(clickEvent) {
+        if(this.disabled) return true;
+
         if(clickEvent.target.classList.contains("select2-selection__clear")) {
             this.clearSelection();
             this.closeDropdown();

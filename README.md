@@ -48,7 +48,7 @@ this will add all components as global resources. If you don't want that, instea
 # paj-combobox
 This is a combobox meant for use with potentially infinite length odata-like apis. It takes inspiration (and css) from select2.
 
-It implements infinte scrolling, and works best with an index api, e.g. for an item
+It implements infinite scrolling, and works best with an index api, e.g. for an item
 
 ```
 {
@@ -82,6 +82,12 @@ simple example:
 ```
 
 `dataSource` needs to implement IComboboxDataSource
+
+## options
+
+- width: string, e.g. `"100%"`
+
+- disabled: boolean
 
 ## custom templates
 
